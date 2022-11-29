@@ -1,0 +1,14 @@
+{
+    "name": "vendic/magento2-captain-hook",
+    "description": "Captain hook configuration for Magento 2",
+    "type": "library",
+    "require": {
+        "captainhook/captainhook": "^5.11"
+    },
+    "authors": [
+        {
+            "name": "Tjitse Efdé",
+            "email": "tjitse@vendic.nl"
+        }
+    ]
+}

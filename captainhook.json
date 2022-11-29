@@ -1,0 +1,71 @@
+{
+  "pre-push": {
+    "enabled": true,
+    "actions": [
+      {
+        "action": "\\CaptainHook\\App\\Hook\\Branch\\Action\\EnsureNaming",
+        "options": {
+          "regex": "/^[a-zA-Z0-9\\/-_]+$/"
+        }
+      }
+    ]
+  },
+  "pre-commit": {
+    "fail-on-first-error": false,
+    "enabled": true,
+    "actions": [
+      {
+        "action": "vendor/bin/phpcs --standard=phpcs.xml {$STAGED_FILES|of-type:php} {$STAGED_FILES|of-type:phtml}",
+        "conditions": [
+          {
+            "exec": "\\CaptainHook\\App\\Hook\\Condition\\FileStaged\\OfType",
+            "args": [
+              "php",
+              "phtml"
+            ]
+          },
+          {
+            "exec": "\\CaptainHook\\App\\Hook\\Condition\\FileStaged\\InDirectory",
+            "args": [
+              "app/"
+            ]
+          }
+        ]
+      },
+      {
+        "action": "vendor/bin/phpstan --configuration=phpstan.neon analyze {$STAGED_FILES|of-type:php}",
+        "conditions": [
+          {
+            "exec": "\\CaptainHook\\App\\Hook\\Condition\\FileStaged\\OfType",
+            "args": [
+              "php"
+            ]
+          },
+          {
+            "exec": "\\CaptainHook\\App\\Hook\\Condition\\FileStaged\\InDirectory",
+            "args": [
+              "app/"
+            ]
+          }
+        ]
+      },
+      {
+        "action": "eslint -c .github/workflows/configs/.eslintrc --no-error-on-unmatched-pattern {$STAGED_FILES|of-type:js}",
+        "conditions": [
+          {
+            "exec": "\\CaptainHook\\App\\Hook\\Condition\\FileStaged\\OfType",
+            "args": [
+              "js"
+            ]
+          },
+          {
+            "exec": "\\CaptainHook\\App\\Hook\\Condition\\FileStaged\\InDirectory",
+            "args": [
+              "app/"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
